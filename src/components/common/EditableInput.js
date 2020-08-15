@@ -31,7 +31,12 @@ export class EditableInput extends (PureComponent || Component) {
       this.props.value !== this.state.value &&
       (prevProps.value !== this.props.value || prevState.value !== this.state.value)
     ) {
-      if (this.input === document.activeElement) {
+      let { activeElement } = document
+      if (this.props.shadowRootSelector) {
+        const shadowRootNode = document.querySelector(this.props.shadowRootSelector)
+        activeElement = shadowRootNode && shadowRootNode.shadowRoot && shadowRootNode.shadowRoot.activeElement
+      }
+      if (this.input === activeElement) {
         this.setState({ blurValue: String(this.props.value).toUpperCase() })
       } else {
         this.setState({ value: String(this.props.value).toUpperCase(), blurValue: !this.state.blurValue && String(this.props.value).toUpperCase() })
